@@ -31,7 +31,6 @@ class CityFragment :
         super.onDestroyView()
 
         savePreferences(requireActivity().getPreferences(MODE_PRIVATE))
-//        binding = null
     }
 
     private var clickListener: View.OnClickListener = View.OnClickListener {
@@ -73,7 +72,6 @@ class CityFragment :
             .beginTransaction()
             .replace(R.id.weather_container, fragment)
             .commit()
-        //viewModel.saveChanges(data.copyWeather())
     }
 
     override fun renderError(error: Throwable) {

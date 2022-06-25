@@ -1,4 +1,4 @@
-package com.example.menuhomework.model.database.converters
+package com.example.menuhomework.model.database
 
 import androidx.room.TypeConverter
 import java.util.*

@@ -11,7 +11,6 @@ import kotlinx.coroutines.channels.consumeEach
 import kotlin.coroutines.CoroutineContext
 
 abstract class BaseFragment<E, VB : ViewBinding>
-//abstract class BaseFragment<E, VB : ViewBinding, T, VM : BaseViewModel<E, T>>
     (
     @LayoutRes private val layoutId: Int
 ) : Fragment(layoutId), CoroutineScope {

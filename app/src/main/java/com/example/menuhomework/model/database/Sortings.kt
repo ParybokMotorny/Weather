@@ -1,4 +1,4 @@
-package com.example.menuhomework.model.database.search
+package com.example.menuhomework.model.database
 
 object Sortings {
     const val NAME = 1

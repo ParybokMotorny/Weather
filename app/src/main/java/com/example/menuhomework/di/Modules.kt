@@ -3,7 +3,7 @@ package com.example.menuhomework.di
 import androidx.room.Room
 import com.example.menuhomework.model.Repository
 import com.example.menuhomework.model.database.WeatherSource
-import com.example.menuhomework.model.database.database.WeatherDatabase
+import com.example.menuhomework.model.database.WeatherDatabase
 import com.example.menuhomework.model.providers.DataProvider
 import com.example.menuhomework.model.providers.InternetProvider
 import com.example.menuhomework.model.retrofit.OpenWeatherMapProvider

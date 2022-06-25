@@ -3,7 +3,7 @@ package com.example.menuhomework.viewmodels
 import com.example.menuhomework.model.Result
 import com.example.menuhomework.model.Repository
 import com.example.menuhomework.model.database.Weather
-import com.example.menuhomework.model.database.search.Sortings
+import com.example.menuhomework.model.database.Sortings
 import com.example.menuhomework.model.exceptions.InvalidSortingException
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch

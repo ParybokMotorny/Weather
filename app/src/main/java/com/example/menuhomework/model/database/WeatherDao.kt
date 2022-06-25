@@ -1,4 +1,4 @@
-package com.example.menuhomework.model.database.dao
+package com.example.menuhomework.model.database
 
 import androidx.room.*
 import com.example.menuhomework.model.database.Weather

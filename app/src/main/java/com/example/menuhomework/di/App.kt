@@ -2,7 +2,7 @@ package com.example.menuhomework.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.menuhomework.model.database.database.WeatherDatabase
+import com.example.menuhomework.model.database.WeatherDatabase
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 

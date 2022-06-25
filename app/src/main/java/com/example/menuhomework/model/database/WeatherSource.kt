@@ -1,11 +1,8 @@
 package com.example.menuhomework.model.database
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.menuhomework.di.App
 import com.example.menuhomework.model.Result
 import com.example.menuhomework.model.providers.DataProvider
-import com.example.menuhomework.model.database.dao.WeatherDao
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlin.coroutines.resume

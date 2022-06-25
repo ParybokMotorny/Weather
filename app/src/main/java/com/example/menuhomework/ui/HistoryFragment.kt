@@ -6,7 +6,7 @@ import android.view.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.menuhomework.R
-import com.example.menuhomework.model.database.search.Sortings
+import com.example.menuhomework.model.database.Sortings
 import com.example.menuhomework.databinding.FragmentSearchBinding
 import com.example.menuhomework.model.database.Weather
 import com.example.menuhomework.viewmodels.HistoryViewModel
@@ -140,7 +140,7 @@ class HistoryFragment :
 
         parentFragmentManager
             .beginTransaction()
-            .replace(R.id.fragment_container, fragment)
+            .add(R.id.fragment_container, fragment)
             .addToBackStack(null)
             .commit()
     }
