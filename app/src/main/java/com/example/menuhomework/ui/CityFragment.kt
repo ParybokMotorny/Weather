@@ -10,7 +10,6 @@ import androidx.appcompat.app.AlertDialog
 import com.example.menuhomework.R
 import com.example.menuhomework.databinding.FragmentCityBinding
 import com.example.menuhomework.model.database.Weather
-import com.example.menuhomework.viewStates.CityViewState
 import com.example.menuhomework.viewmodels.CityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 

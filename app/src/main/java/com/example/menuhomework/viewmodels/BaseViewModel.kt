@@ -1,10 +1,6 @@
 package com.example.menuhomework.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.menuhomework.viewStates.AppState
-import com.example.menuhomework.viewStates.AppStateEntity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.BroadcastChannel
 import kotlinx.coroutines.channels.Channel

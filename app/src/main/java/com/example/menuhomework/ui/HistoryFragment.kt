@@ -9,7 +9,6 @@ import com.example.menuhomework.R
 import com.example.menuhomework.model.database.search.Sortings
 import com.example.menuhomework.databinding.FragmentSearchBinding
 import com.example.menuhomework.model.database.Weather
-import com.example.menuhomework.viewStates.HistoryViewState
 import com.example.menuhomework.viewmodels.HistoryViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
