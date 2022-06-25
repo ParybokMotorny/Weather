@@ -1,6 +1,6 @@
 package com.example.menuhomework.viewStates
 
-sealed class AppState<E, T : AppStateEntity<E>> {
-    data class Success<E, T : AppStateEntity<E>>(val data: T) : AppState<E, T>()
-    data class Error<E, T : AppStateEntity<E>>(val error: String) : AppState<E, T>()
+sealed class AppState<T> {
+    data class Success<T>(val data: AppStateEntity<T>) : AppState<T>()
+    data class Error<T>(val error: String) : AppState<T>()
 }

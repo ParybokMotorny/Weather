@@ -1,11 +1,9 @@
 package com.example.menuhomework.model.providers
 
-import androidx.lifecycle.LiveData
-import com.example.menuhomework.model.RequestResult
+import com.example.menuhomework.model.database.Weather
 
 interface InternetProvider {
 
-    fun request(city: String): LiveData<RequestResult>
-
-    fun request(latitude: Float, longitude: Float): LiveData<RequestResult>
+    suspend fun request(city: String): Weather
+    suspend fun request(latitude: Float, longitude: Float): Weather
 }

@@ -4,25 +4,21 @@ import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.ViewModelProvider
 import com.example.menuhomework.R
 import com.example.menuhomework.databinding.FragmentCityBinding
 import com.example.menuhomework.model.database.Weather
 import com.example.menuhomework.viewStates.CityViewState
 import com.example.menuhomework.viewmodels.CityViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CityFragment :
-    BaseFragment<Weather, FragmentCityBinding, CityViewState, CityViewModel>(R.layout.fragment_city) {
+    BaseFragment<Weather, FragmentCityBinding>(R.layout.fragment_city) {
 
     private var showError: Boolean = false
-    override val viewModel: CityViewModel by lazy {
-        ViewModelProvider(this).get(CityViewModel::class.java)
-    }
+    override val viewModel: CityViewModel by viewModel()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,7 +36,7 @@ class CityFragment :
     }
 
     private var clickListener: View.OnClickListener = View.OnClickListener {
-        viewModel.loadNote(binding.city.text.toString())
+        viewModel.loadWeather(binding.city.text.toString())
     }
 
     private fun savePreferences(sharedPref: SharedPreferences) {
@@ -56,7 +52,7 @@ class CityFragment :
 
         val city = sharedPref.getString(CITY, null)
         binding.city.setText(city)
-        viewModel.loadNote(binding.city.text.toString())
+        viewModel.loadWeather(binding.city.text.toString())
         showError = false
     }
 
@@ -67,8 +63,8 @@ class CityFragment :
     override fun bindView() = FragmentCityBinding.bind(requireView())
 
 
-    override fun renderSuccess(data: CityViewState) {
-        val fragment = WeatherFragment.newInstance(data.data)
+    override fun renderSuccess(data: Weather) {
+        val fragment = WeatherFragment.newInstance(data)
 
         val imm: InputMethodManager =
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -81,11 +77,11 @@ class CityFragment :
         //viewModel.saveChanges(data.copyWeather())
     }
 
-    override fun renderError(error: String) {
+    override fun renderError(error: Throwable) {
 
         if (showError) {
             AlertDialog.Builder(requireContext())
-                .setTitle(error)
+                .setTitle(error.message)
                 .setCancelable(false)
                 .setPositiveButton("OK")
                 { _, _ -> }

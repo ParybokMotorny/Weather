@@ -4,28 +4,23 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.menuhomework.R
 import com.example.menuhomework.model.database.search.Sortings
 import com.example.menuhomework.databinding.FragmentSearchBinding
 import com.example.menuhomework.model.database.Weather
-import com.example.menuhomework.viewStates.SearchViewState
-import com.example.menuhomework.viewmodels.SearchViewModel
+import com.example.menuhomework.viewStates.HistoryViewState
+import com.example.menuhomework.viewmodels.HistoryViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class SearchFragment :
+class HistoryFragment :
     BaseFragment<
             List<Weather>,
-            FragmentSearchBinding,
-            SearchViewState,
-            SearchViewModel
-            >(R.layout.fragment_search),
+            FragmentSearchBinding>(R.layout.fragment_search),
     RequestRecyclerAdapter.OnItemClickListener {
 
     private lateinit var adapter: RequestRecyclerAdapter
-    override val viewModel: SearchViewModel by lazy {
-        ViewModelProvider(this).get(SearchViewModel::class.java)
-    }
+    override val viewModel: HistoryViewModel by viewModel()
     private var sorting = Sortings.DATEDESC
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -151,29 +146,17 @@ class SearchFragment :
             .commit()
     }
 
-    companion object {
-        private const val SORT = "sort"
-    }
-
     override fun bindView(): FragmentSearchBinding = FragmentSearchBinding.bind(requireView())
 
-    override fun renderSuccess(data: SearchViewState) {
-        val result = mutableListOf<Weather>()
-
-        for (weather in data.data) {
-            result.add(weather)
+    override fun renderSuccess(data: List<Weather>) {
+        adapter.weathers = mutableListOf<Weather>().apply {
+            for (weather in data) {
+                this.add(weather)
+            }
         }
-
-        adapter.weathers = result
     }
 
-    override fun renderError(error: String) {
-        AlertDialog.Builder(requireContext())
-            .setTitle(error)
-            .setCancelable(false)
-            .setPositiveButton("OK")
-            { _, _ -> }
-            .create()
-            .show()
+    companion object {
+        private const val SORT = "sort"
     }
 }

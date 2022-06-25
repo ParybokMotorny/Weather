@@ -1,41 +1,34 @@
 package com.example.menuhomework.model.retrofit
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.example.menuhomework.model.providers.InternetProvider
-import com.example.menuhomework.model.RequestResult
+import com.example.menuhomework.model.database.Weather
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class OpenWeatherMapProvider : InternetProvider {
-    override fun request(city: String): LiveData<RequestResult> {
-        val result = MutableLiveData<RequestResult>()
 
-        Retrofit({ request ->
-            result.value = RequestResult.Success(request)
-        }, { exception ->
-            result.value = RequestResult.Error(exception)
-        })
-            .run(
-                city,
-                "6b0423304b20ad534ccceecc6d3c729a"
-            )
+    override suspend fun request(city: String): Weather =
+        suspendCoroutine { continuation ->
+            Retrofit({ request ->
+                continuation.resume(request)
+            }, { exception ->
+                continuation.resumeWithException(exception)
+            }).run(city, key)
+        }
 
-        return result
-    }
+    override suspend fun request(latitude: Float, longitude: Float): Weather =
+        suspendCoroutine { continuation ->
 
-    override fun request(latitude: Float, longitude: Float): LiveData<RequestResult> {
-        val result = MutableLiveData<RequestResult>()
 
-        Retrofit({ request ->
-            result.value = RequestResult.Success(request)
-        }, { exception ->
-            result.value = RequestResult.Error(exception)
-        })
-            .run(
-                latitude,
-                longitude,
-                "6b0423304b20ad534ccceecc6d3c729a"
-            )
+            Retrofit({ request ->
+                continuation.resume(request)
+            }, { exception ->
+                continuation.resumeWithException(exception)
+            }).run(latitude, longitude, key)
+        }
 
-        return result
+    companion object {
+        private const val key = "6b0423304b20ad534ccceecc6d3c729a"
     }
 }

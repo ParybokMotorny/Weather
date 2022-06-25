@@ -9,18 +9,11 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.location.*
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.ViewModelProvider
 import com.example.menuhomework.R
-import com.example.menuhomework.databinding.FragmentCityBinding
 import com.example.menuhomework.databinding.FragmentMapsBinding
 import com.example.menuhomework.model.database.Weather
-import com.example.menuhomework.viewStates.MapsViewState
-import com.example.menuhomework.viewmodels.CityViewModel
 import com.example.menuhomework.viewmodels.MapsViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -29,19 +22,18 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MapsFragment :
-    BaseFragment<Weather, FragmentMapsBinding, MapsViewState, MapsViewModel>(R.layout.fragment_maps),
+    BaseFragment<Weather, FragmentMapsBinding>(R.layout.fragment_maps),
     OnMapReadyCallback {
 
     private var currentMarker: Marker? = null
     private var mMap: GoogleMap? = null
     private var currentPosition = LatLng(-34.0, 151.0)
 
-    override val viewModel: MapsViewModel by lazy {
-        ViewModelProvider(this).get(MapsViewModel::class.java)
-    }
+    override val viewModel: MapsViewModel by viewModel()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -67,7 +59,7 @@ class MapsFragment :
         mMap?.setOnMapLongClickListener {
             savePreferences(requireActivity().getPreferences(Context.MODE_PRIVATE), currentPosition)
 
-            viewModel.loadNote(
+            viewModel.loadWeather(
                 it.latitude.toFloat(),
                 it.longitude.toFloat(),
             )
@@ -154,18 +146,6 @@ class MapsFragment :
         }
     }
 
-    override fun renderError(error: String) {
-
-        AlertDialog.Builder(requireContext())
-            .setTitle(error)
-            .setCancelable(false)
-            .setPositiveButton("OK")
-            { _, _ -> }
-            .create()
-            .show()
-    }
-
-
     companion object {
         private const val PERMISSION_REQUEST_CODE = 10
         private const val LAT = "11"
@@ -174,8 +154,8 @@ class MapsFragment :
 
     override fun bindView(): FragmentMapsBinding = FragmentMapsBinding.bind(requireView())
 
-    override fun renderSuccess(data: MapsViewState) {
-        val fragment = WeatherFragment.newInstance(data.data)
+    override fun renderSuccess(data: Weather) {
+        val fragment = WeatherFragment.newInstance(data)
 
         parentFragmentManager
             .beginTransaction()

@@ -19,8 +19,6 @@
     <string name="clear">Clear</string>
     <string name="search">Search</string>
     <string name="communicate">Communicate</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="refresh">Обновити</string>
     <string name="city">Місто</string>

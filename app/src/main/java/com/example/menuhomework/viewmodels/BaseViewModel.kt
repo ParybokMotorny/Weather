@@ -5,26 +5,49 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.menuhomework.viewStates.AppState
 import com.example.menuhomework.viewStates.AppStateEntity
-import com.example.menuhomework.viewStates.BaseViewState
-import java.lang.Error
+import kotlinx.coroutines.*
+import kotlinx.coroutines.channels.BroadcastChannel
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlin.coroutines.CoroutineContext
 
 /*
 E - type of input parameters
 for example Weather, List<Weather> etc.
  */
 
-abstract class BaseViewModel<E, T : AppStateEntity<E>>
-    : ViewModel() {
-    protected val _liveData = MutableLiveData<AppState<E, T>>()
-    val liveData = _liveData as LiveData<AppState<E, T>>
-
-    protected fun emitSuccess(data: T) {
-        val state = AppState.Success(data)
-        _liveData.postValue(state)
+abstract class BaseViewModel<T>
+    : ViewModel(),
+    CoroutineScope {
+    override val coroutineContext: CoroutineContext by lazy {
+        Dispatchers.Default + Job()
     }
 
-    protected fun emitError(error: String) {
-        val state = AppState.Error<E, T>(error)
-        _liveData.postValue(state)
+    private val viewStateChannel = BroadcastChannel<T>(Channel.CONFLATED)
+
+    private val errorChannel = Channel<Throwable>()
+
+    open fun getViewState(): ReceiveChannel<T> = viewStateChannel.openSubscription()
+
+    open fun getErrorChannel(): ReceiveChannel<Throwable> = errorChannel
+
+    protected fun setError(e: Throwable) {
+        launch {
+            errorChannel.send(e)
+        }
+    }
+
+    protected fun setData(data: T) {
+        launch {
+            viewStateChannel.send(data)
+        }
+    }
+
+    override fun onCleared() {
+        viewStateChannel.close()
+        errorChannel.close()
+        coroutineContext.cancel()
+
+        super.onCleared()
     }
 }

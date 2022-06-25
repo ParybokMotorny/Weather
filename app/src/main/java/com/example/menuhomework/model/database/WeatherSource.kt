@@ -2,20 +2,30 @@ package com.example.menuhomework.model.database
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.menuhomework.di.App
+import com.example.menuhomework.model.Result
 import com.example.menuhomework.model.providers.DataProvider
 import com.example.menuhomework.model.database.dao.WeatherDao
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
-class WeatherSource : DataProvider {
-    private val dao: WeatherDao by lazy {
-        App.instance.db.weatherDao
-    }
+class WeatherSource(private val dao: WeatherDao) : DataProvider {
 
     var weathers: MutableLiveData<MutableList<Weather>> =
         MutableLiveData(dao.getAllWeathers().copy())
 
-    override fun subscribeToAllWeathers(): LiveData<MutableList<Weather>> {
-        return weathers
-    }
+    override suspend fun subscribeToAllWeathers(): ReceiveChannel<Result> =
+        Channel<Result>(Channel.CONFLATED).apply {
+            try {
+                trySend(Result.Success(dao.getAllWeathers()))
+            } catch (e: Throwable) {
+                trySend(Result.Error(e))
+            }
+        }
+
 
     private fun List<Weather>.copy(): MutableList<Weather> {
         val result = mutableListOf<Weather>()
@@ -27,31 +37,64 @@ class WeatherSource : DataProvider {
         return result
     }
 
-    override fun getWeathersById(id: Long): LiveData<Weather> =
-        MutableLiveData(dao.getWeatherById(id))
+    override suspend fun getWeathersById(id: Long): Weather =
+        suspendCoroutine { continuation ->
+            try {
+                continuation.resume(dao.getWeatherById(id))
+            } catch (e: Throwable) {
+                continuation.resumeWithException(e)
+            }
+        }
 
 
-    override fun saveWeathers(weather: Weather) {
-        weathers.value?.add(dao.getWeatherById(dao.insertWeather(weather)))
-    }
-
-    override fun deleteWeatherById(id: Long) {
-        dao.deleteWeatherById(id)
-        weathers.value = dao.getAllWeathers().copy()
-    }
-
-    override fun deleteAll() {
-        dao.deleteAll()
-        weathers.value = dao.getAllWeathers().copy()
-    }
-
-    override fun sortAllByName(isAsc: Int) {
-        weathers.value = dao.getAllSortedByName(isAsc).copy()
-    }
+    override suspend fun saveWeathers(weather: Weather): Weather =
+        suspendCoroutine { continuation ->
+            try {
+                dao.insertWeather(weather)
+                continuation.resume(weather)
+            } catch (e: Throwable) {
+                continuation.resumeWithException(e)
+            }
+        }
 
 
-    override fun sortAllByDate(isAsc: Int) {
-        weathers.value = dao.getAllSortedByDate(isAsc).copy()
-    }
+    override suspend fun deleteWeatherById(id: Long): List<Weather> =
+        suspendCoroutine { continuation ->
+            try {
+                continuation.resume(dao.getAllWeathers())
+            } catch (e: Throwable) {
+                continuation.resumeWithException(e)
+            }
+        }
+
+
+    override suspend fun deleteAll(): List<Weather> =
+        suspendCoroutine { continuation ->
+            try {
+                continuation.resume(listOf())
+            } catch (e: Throwable) {
+                continuation.resumeWithException(e)
+            }
+        }
+
+
+    override suspend fun sortAllByName(isAsc: Int): List<Weather> =
+        suspendCoroutine { continuation ->
+            try {
+                continuation.resume(dao.getAllSortedByName(isAsc))
+            } catch (e: Throwable) {
+                continuation.resumeWithException(e)
+            }
+        }
+
+
+    override suspend fun sortAllByDate(isAsc: Int): List<Weather> =
+        suspendCoroutine { continuation ->
+            try {
+                continuation.resume(dao.getAllSortedByDate(isAsc))
+            } catch (e: Throwable) {
+                continuation.resumeWithException(e)
+            }
+        }
 }
 

@@ -1,16 +1,19 @@
 package com.example.menuhomework.model.retrofit
 
 import com.example.menuhomework.model.database.Weather
+import com.example.menuhomework.model.exceptions.CityDoesNotExistException
+import com.example.menuhomework.model.exceptions.InternetException
 import com.example.menuhomework.model.retrofit.model.WeatherRequest
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Exception
 
 class Retrofit(
     private val onCompleted: (Weather) -> Unit,
-    private val onFail: (String) -> Unit
+    private val onFail: (Throwable) -> Unit
 ) {
 
     private var openWeatherRequests: OpenWeatherRequests? = null
@@ -60,12 +63,12 @@ class Retrofit(
             response.body()?.let {
                 onCompleted(it.convertToRequest())
             } ?: run {
-                onFail("This city does not exist")
+                onFail(CityDoesNotExistException())
             }
         }
 
         override fun onFailure(call: Call<WeatherRequest?>, t: Throwable) {
-            onFail("Can`t connect to server. Check your Internet connection")
+            onFail(InternetException())
         }
     }
 }

@@ -1,8 +1,10 @@
-package com.example.menuhomework.model.database
+package com.example.menuhomework.di
 
 import android.app.Application
 import androidx.room.Room
 import com.example.menuhomework.model.database.database.WeatherDatabase
+import org.koin.android.ext.koin.androidContext
+import org.koin.core.context.startKoin
 
 class App : Application() {
     companion object {
@@ -22,6 +24,11 @@ class App : Application() {
             .allowMainThreadQueries()
             .fallbackToDestructiveMigration()
             .build()
+
+        startKoin {
+            androidContext(this@App)
+            modules(appModule, cityModule, historyModule, mapsModule, databaseModule)
+        }
     }
 
 

@@ -13,8 +13,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.menuhomework.R
 import com.example.menuhomework.databinding.ActivityMainBinding
-import com.example.menuhomework.model.Repository
-import com.example.menuhomework.model.database.App
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity :
@@ -67,7 +65,7 @@ class MainActivity :
                 val imm = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
 
-                replaceFragment(SearchFragment())
+                replaceFragment(HistoryFragment())
             }
             R.id.nav_gps -> {
                 replaceFragment(MapsFragment())

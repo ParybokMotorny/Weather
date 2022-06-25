@@ -1,21 +1,16 @@
 package com.example.menuhomework.model.providers
 
-import androidx.lifecycle.LiveData
+import com.example.menuhomework.model.Result
 import com.example.menuhomework.model.database.Weather
+import kotlinx.coroutines.channels.ReceiveChannel
 
 interface DataProvider {
 
-    fun subscribeToAllWeathers(): LiveData<MutableList<Weather>>
-
-    fun getWeathersById(id: Long): LiveData<Weather>
-
-    fun saveWeathers(weather: Weather)
-
-    fun deleteWeatherById(id: Long)
-
-    fun deleteAll()
-
-    fun sortAllByName(isAsc: Int)
-
-    fun sortAllByDate(isAsc: Int)
+    suspend fun subscribeToAllWeathers(): ReceiveChannel<Result>
+    suspend fun getWeathersById(id: Long): Weather
+    suspend fun saveWeathers(weather: Weather): Weather
+    suspend fun deleteWeatherById(id: Long): List<Weather>
+    suspend fun deleteAll(): List<Weather>
+    suspend fun sortAllByName(isAsc: Int): List<Weather>
+    suspend fun sortAllByDate(isAsc: Int): List<Weather>
 }
