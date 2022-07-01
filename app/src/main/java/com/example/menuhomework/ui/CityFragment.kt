@@ -7,14 +7,15 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.isVisible
 import com.example.menuhomework.R
 import com.example.menuhomework.databinding.FragmentCityBinding
-import com.example.menuhomework.model.database.Weather
+import com.example.menuhomework.model.database.WeatherEntity
 import com.example.menuhomework.viewmodels.CityViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CityFragment :
-    BaseFragment<Weather, FragmentCityBinding>(R.layout.fragment_city) {
+    BaseFragment<WeatherEntity, FragmentCityBinding>(R.layout.fragment_city) {
 
     private var showError: Boolean = false
     override val viewModel: CityViewModel by viewModel()
@@ -27,14 +28,15 @@ class CityFragment :
         loadPreferences(requireActivity().getPreferences(MODE_PRIVATE))
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
+    override fun onDestroy() {
+        super.onDestroy()
 
         savePreferences(requireActivity().getPreferences(MODE_PRIVATE))
     }
 
     private var clickListener: View.OnClickListener = View.OnClickListener {
         viewModel.loadWeather(binding.city.text.toString())
+        binding.progressBar.isVisible = true
     }
 
     private fun savePreferences(sharedPref: SharedPreferences) {
@@ -51,6 +53,7 @@ class CityFragment :
         val city = sharedPref.getString(CITY, null)
         binding.city.setText(city)
         viewModel.loadWeather(binding.city.text.toString())
+        binding.progressBar.isVisible = true
         showError = false
     }
 
@@ -61,8 +64,10 @@ class CityFragment :
     override fun bindView() = FragmentCityBinding.bind(requireView())
 
 
-    override fun renderSuccess(data: Weather) {
-        val fragment = WeatherFragment.newInstance(data)
+    override fun renderSuccess(data: WeatherEntity) {
+        binding.progressBar.isVisible = false
+
+        val fragment = WeatherFragment.newInstance(data, false)
 
         val imm: InputMethodManager =
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -75,6 +80,7 @@ class CityFragment :
     }
 
     override fun renderError(error: Throwable) {
+        binding.progressBar.isVisible = false
 
         if (showError) {
             AlertDialog.Builder(requireContext())

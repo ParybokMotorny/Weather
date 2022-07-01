@@ -5,8 +5,8 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 
 @Database(
-    entities = [Weather::class],
-    version = 2
+    entities = [WeatherEntity::class],
+    version = 4
 )
 @TypeConverters(DateConverter::class)
 abstract class WeatherDatabase : RoomDatabase() {

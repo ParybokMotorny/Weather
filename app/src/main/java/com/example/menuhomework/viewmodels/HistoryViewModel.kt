@@ -2,8 +2,7 @@ package com.example.menuhomework.viewmodels
 
 import com.example.menuhomework.model.Result
 import com.example.menuhomework.model.Repository
-import com.example.menuhomework.model.database.Weather
-import com.example.menuhomework.model.database.Sortings
+import com.example.menuhomework.model.database.*
 import com.example.menuhomework.model.exceptions.InvalidSortingException
 import kotlinx.coroutines.channels.consumeEach
 import kotlinx.coroutines.launch
@@ -11,7 +10,7 @@ import kotlinx.coroutines.runBlocking
 
 class HistoryViewModel(
     private val repository: Repository
-) : BaseViewModel<List<Weather>>() {
+) : BaseViewModel<List<WeatherEntity>>() {
 
     private val weathersChannel by lazy { runBlocking { repository.getWeathers() } }
 
@@ -20,7 +19,7 @@ class HistoryViewModel(
             weathersChannel.consumeEach { result ->
                 when (result) {
                     is Result.Success<*> ->
-                        (result as? List<Weather>)?.let { setData(it) }
+                        (result as? List<WeatherEntity>)?.let { setData(it) }
                     else -> setError((result as Result.Error).error)
                 }
             }
@@ -51,10 +50,10 @@ class HistoryViewModel(
         launch {
             try {
                 when (type) {
-                    Sortings.DATE -> setData(repository.sortAllByDate(1))
-                    Sortings.DATEDESC -> setData(repository.sortAllByDate(2))
-                    Sortings.NAME -> setData(repository.sortAllByName(1))
-                    Sortings.NAMEDESC -> setData(repository.sortAllByName(2))
+                    DATE -> setData(repository.sortAllByDate(1))
+                    DATEDESC -> setData(repository.sortAllByDate(2))
+                    NAME -> setData(repository.sortAllByName(1))
+                    NAMEDESC -> setData(repository.sortAllByName(2))
                     else -> {
                         setError(InvalidSortingException())
                     }

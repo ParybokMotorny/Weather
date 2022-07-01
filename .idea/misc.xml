@@ -9,6 +9,9 @@
         <entry key="..\:/Roman/android/Weather/app/src/main/res/layout/fragment_weather.xml" value="0.5541666666666667" />
         <entry key="..\:/Roman/android/Weather/app/src/main/res/menu/activity_main_drawer.xml" value="0.3877551020408163" />
         <entry key="..\:/Roman/android/Weather/app/src/main/res/menu/context_menu.xml" value="0.2638888888888889" />
+        <entry key="..\:/Roman/kotlin/Android.notbase/lesson1/Weather/app/src/main/res/layout/fragment_city.xml" value="0.22826086956521738" />
+        <entry key="..\:/Roman/kotlin/Android.notbase/lesson1/Weather/app/src/main/res/layout/fragment_maps.xml" value="0.22826086956521738" />
+        <entry key="..\:/Roman/kotlin/Android.notbase/lesson1/Weather/app/src/main/res/layout/fragment_weather.xml" value="0.1" />
       </map>
     </option>
   </component>

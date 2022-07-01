@@ -11,9 +11,10 @@ import android.location.*
 import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
+import androidx.core.view.isVisible
 import com.example.menuhomework.R
 import com.example.menuhomework.databinding.FragmentMapsBinding
-import com.example.menuhomework.model.database.Weather
+import com.example.menuhomework.model.database.WeatherEntity
 import com.example.menuhomework.viewmodels.MapsViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -26,7 +27,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MapsFragment :
-    BaseFragment<Weather, FragmentMapsBinding>(R.layout.fragment_maps),
+    BaseFragment<WeatherEntity, FragmentMapsBinding>(R.layout.fragment_maps),
     OnMapReadyCallback {
 
     private var currentMarker: Marker? = null
@@ -57,6 +58,8 @@ class MapsFragment :
         mMap?.moveCamera(CameraUpdateFactory.newLatLng(currentPosition))
 
         mMap?.setOnMapLongClickListener {
+            binding.progressBar.isVisible = true
+
             savePreferences(requireActivity().getPreferences(Context.MODE_PRIVATE), currentPosition)
 
             viewModel.loadWeather(
@@ -154,13 +157,21 @@ class MapsFragment :
 
     override fun bindView(): FragmentMapsBinding = FragmentMapsBinding.bind(requireView())
 
-    override fun renderSuccess(data: Weather) {
-        val fragment = WeatherFragment.newInstance(data)
+    override fun renderSuccess(data: WeatherEntity) {
+        binding.progressBar.isVisible = false
+
+        val fragment = WeatherFragment.newInstance(data, false)
 
         parentFragmentManager
             .beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    override fun renderError(error: Throwable) {
+        binding.progressBar.isVisible = false
+
+        super.renderError(error)
     }
 }

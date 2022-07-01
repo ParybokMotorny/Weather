@@ -1,6 +1,6 @@
 package com.example.menuhomework.model.retrofit
 
-import com.example.menuhomework.model.database.Weather
+import com.example.menuhomework.model.database.WeatherEntity
 import com.example.menuhomework.model.exceptions.CityDoesNotExistException
 import com.example.menuhomework.model.exceptions.InternetException
 import com.example.menuhomework.model.retrofit.model.WeatherRequest
@@ -9,10 +9,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.Exception
 
 class Retrofit(
-    private val onCompleted: (Weather) -> Unit,
+    private val onCompleted: (WeatherEntity) -> Unit,
     private val onFail: (Throwable) -> Unit
 ) {
 
@@ -23,8 +22,17 @@ class Retrofit(
     }
 
     fun run(city: String, keyApi: String) {
+        var newCity = city
+        while (newCity.endsWith(" ")){
+            newCity = newCity.removeSuffix(" ")
+        }
+
+        while (newCity.startsWith(" ")){
+            newCity = newCity.removePrefix(" ")
+        }
+
         requestRetrofit(
-            city,
+            newCity,
             keyApi
         )
     }

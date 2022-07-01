@@ -1,14 +1,14 @@
 package com.example.menuhomework.model.retrofit
 
 import com.example.menuhomework.model.providers.InternetProvider
-import com.example.menuhomework.model.database.Weather
+import com.example.menuhomework.model.database.WeatherEntity
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 class OpenWeatherMapProvider : InternetProvider {
 
-    override suspend fun request(city: String): Weather =
+    override suspend fun request(city: String): WeatherEntity =
         suspendCoroutine { continuation ->
             Retrofit({ request ->
                 continuation.resume(request)
@@ -17,7 +17,7 @@ class OpenWeatherMapProvider : InternetProvider {
             }).run(city, key)
         }
 
-    override suspend fun request(latitude: Float, longitude: Float): Weather =
+    override suspend fun request(latitude: Float, longitude: Float): WeatherEntity =
         suspendCoroutine { continuation ->
 
 

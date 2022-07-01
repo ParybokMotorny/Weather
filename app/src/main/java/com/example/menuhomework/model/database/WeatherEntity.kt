@@ -8,28 +8,37 @@ import java.util.*
 
 @Entity
 @Parcelize
-data class Weather(
+data class WeatherEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Long = 0,
 
-    var city: String? = null,
+    var city: String,
 
-    var temp: Float = 0f,
+    var temp: Float,
 
-    var pressure: Int = 0,
+    var pressure: Int,
 
-    var humidity: Int = 0,
+    var humidity: Int,
 
-    var date: Date? = null,
+    var date: Date,
 
-    var icon: String? = null,
+    var icon: String,
+
+    var allClouds: Int,
+
+    var windSpeed: Float,
+
+    var windDeg: Float,
+
+    var visibility: Int
+
 ) : Parcelable {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as Weather
+        other as WeatherEntity
 
         if (id != other.id) return false
 
@@ -38,16 +47,5 @@ data class Weather(
 
     override fun hashCode(): Int {
         return id.hashCode()
-    }
-
-    fun copyWeather() : Weather{
-        return copy(
-            id = id,
-            city = city,
-            temp = temp,
-            pressure = pressure,
-            humidity = humidity,
-            date = date
-        )
     }
 }

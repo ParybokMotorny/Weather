@@ -1,9 +1,8 @@
 package com.example.menuhomework.model.retrofit.model
 
-import com.example.menuhomework.model.database.Weather
+import com.example.menuhomework.model.database.WeatherEntity
 import java.io.Serializable
 import java.util.*
-import kotlin.math.roundToInt
 
 class WeatherRequest : Serializable {
 
@@ -27,18 +26,22 @@ class WeatherRequest : Serializable {
 
     var id: Long = 0
 
-    var name: String? = null
+    var name: String = ""
 
     var cod = 0
 
-    fun convertToRequest(): Weather {
-        return Weather(
+    fun convertToRequest(): WeatherEntity {
+        return WeatherEntity(
             date = Date(),
             city = name,
             humidity = main.humidity,
             pressure = main.pressure,
             temp = (main.temp * 10).toInt().toFloat() / 10,
-            icon = weather[0].icon
+            icon = weather[0].icon,
+            allClouds = clouds.all,
+            windDeg = wind.deg,
+            windSpeed = wind.speed,
+            visibility = visibility
         )
     }
 }

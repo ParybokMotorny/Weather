@@ -1,11 +1,11 @@
 package com.example.menuhomework.viewmodels
 
 import com.example.menuhomework.model.Repository
-import com.example.menuhomework.model.database.Weather
+import com.example.menuhomework.model.database.WeatherEntity
 import kotlinx.coroutines.launch
 
 class CityViewModel(private val repository: Repository) :
-    BaseViewModel<Weather>() {
+    BaseViewModel<WeatherEntity>() {
 
     fun loadWeather(city: String) {
         launch {

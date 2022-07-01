@@ -1,42 +1,41 @@
 package com.example.menuhomework.model.database
 
 import androidx.room.*
-import com.example.menuhomework.model.database.Weather
 
 @Dao
 interface WeatherDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertWeather(weather: Weather) : Long
+    fun insertWeather(weather: WeatherEntity) : Long
 
     @Update
-    fun updateWeather(weather: Weather)
+    fun updateWeather(weather: WeatherEntity)
 
     @Delete
-    fun deleteWeather(weather: Weather)
+    fun deleteWeather(weather: WeatherEntity)
 
-    @Query("DELETE FROM weather WHERE id = :id")
+    @Query("DELETE FROM weatherentity WHERE id = :id")
     fun deleteWeatherById(id: Long)
 
-    @Query("SELECT * FROM weather")
-    fun getAllWeathers(): List<Weather>
+    @Query("SELECT * FROM weatherentity")
+    fun getAllWeathers(): List<WeatherEntity>
 
-    @Query("SELECT * FROM weather WHERE id = :id")
-    fun getWeatherById(id: Long): Weather
+    @Query("SELECT * FROM weatherentity WHERE id = :id")
+    fun getWeatherById(id: Long): WeatherEntity
 
-    @Query("SELECT COUNT() FROM weather")
+    @Query("SELECT COUNT() FROM weatherentity")
     fun getCountWeathers(): Long
 
-    @Query("DELETE FROM weather")
+    @Query("DELETE FROM weatherentity")
     fun deleteAll()
 
-    @Query("SELECT * FROM weather ORDER BY " +
+    @Query("SELECT * FROM weatherentity ORDER BY " +
             "CASE WHEN :isAsc = 1 THEN city END ASC, " +
             "CASE WHEN :isAsc = 2 THEN city END DESC ")
-    fun getAllSortedByName(isAsc : Int): List<Weather>
+    fun getAllSortedByName(isAsc : Int): List<WeatherEntity>
 
-    @Query("SELECT * FROM weather ORDER BY " +
+    @Query("SELECT * FROM weatherentity ORDER BY " +
             "CASE WHEN :isAsc = 1 THEN date END ASC, " +
             "CASE WHEN :isAsc = 2 THEN date END DESC ")
-    fun getAllSortedByDate(isAsc : Int): List<Weather>
+    fun getAllSortedByDate(isAsc : Int): List<WeatherEntity>
 }

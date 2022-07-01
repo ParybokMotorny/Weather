@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.menuhomework.R
 import com.example.menuhomework.databinding.ItemBinding
-import com.example.menuhomework.model.database.Weather
+import com.example.menuhomework.model.database.WeatherEntity
 
 class RequestRecyclerAdapter(
     private val activity: Activity,
@@ -16,7 +16,7 @@ class RequestRecyclerAdapter(
 ) :
     RecyclerView.Adapter<RequestRecyclerAdapter.ViewHolder>() {
 
-    var weathers: MutableList<Weather> = mutableListOf()
+    var weathers: MutableList<WeatherEntity> = mutableListOf()
         @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
@@ -51,18 +51,11 @@ class RequestRecyclerAdapter(
         activity.registerForContextMenu(holder.cardView)
     }
 
-
-
-    fun removeItem(position: Int) {
-        weathers.removeAt(position)
-        notifyItemRemoved(position)
-    }
-
     class ViewHolder(var cardView: View) : RecyclerView.ViewHolder(cardView) {
 
         private var ui: ItemBinding = ItemBinding.bind(itemView)
 
-        fun setOnClickListener(listener: OnItemClickListener, weather: Weather) {
+        fun setOnClickListener(listener: OnItemClickListener, weather: WeatherEntity) {
             this.cardView.setOnClickListener {
                 val adapterPosition = adapterPosition
                 if (adapterPosition != RecyclerView.NO_POSITION)
@@ -70,14 +63,14 @@ class RequestRecyclerAdapter(
             }
         }
 
-        fun bind(weather: Weather) {
+        fun bind(weather: WeatherEntity) {
             ui.textRequestCity.text = weather.city
             ui.textRequestDate.text = weather.date.toString()
         }
     }
 
     interface OnItemClickListener {
-        fun onItemClick(view: View, element: Weather)
+        fun onItemClick(view: View, element: WeatherEntity)
     }
 
     override fun getItemCount(): Int = weathers.size
