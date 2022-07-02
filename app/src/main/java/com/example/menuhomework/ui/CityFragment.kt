@@ -8,6 +8,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.isVisible
+import androidx.navigation.Navigation
 import com.example.menuhomework.R
 import com.example.menuhomework.databinding.FragmentCityBinding
 import com.example.menuhomework.model.database.WeatherEntity
@@ -57,26 +58,17 @@ class CityFragment :
         showError = false
     }
 
-    companion object {
-        private const val CITY = "city"
-    }
-
     override fun bindView() = FragmentCityBinding.bind(requireView())
-
 
     override fun renderSuccess(data: WeatherEntity) {
         binding.progressBar.isVisible = false
-
-        val fragment = WeatherFragment.newInstance(data, false)
 
         val imm: InputMethodManager =
             requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireView().windowToken, 0)
 
-        childFragmentManager
-            .beginTransaction()
-            .replace(R.id.weather_container, fragment)
-            .commit()
+        val action = CityFragmentDirections.actionCityFragmentToWeatherFragment(data, false)
+        Navigation.findNavController(binding.fragmentContainerView).navigate(action)
     }
 
     override fun renderError(error: Throwable) {
@@ -91,5 +83,9 @@ class CityFragment :
                 .create()
                 .show()
         } else showError = true
+    }
+
+    companion object {
+        private const val CITY = "city"
     }
 }

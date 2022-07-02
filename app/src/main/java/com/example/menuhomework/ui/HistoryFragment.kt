@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
+import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.menuhomework.R
 import com.example.menuhomework.databinding.FragmentSearchBinding
@@ -133,13 +134,8 @@ class HistoryFragment :
     }
 
     override fun onItemClick(view: View, element: WeatherEntity) {
-        val fragment = WeatherFragment.newInstance(element, true)
-
-        parentFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
+        val action = HistoryFragmentDirections.actionHistoryFragmentToWeatherFragment(element)
+        Navigation.findNavController(view).navigate(action)
     }
 
     override fun bindView(): FragmentSearchBinding = FragmentSearchBinding.bind(requireView())

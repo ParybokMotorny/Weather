@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.navigation.fragment.navArgs
 import com.example.menuhomework.model.database.WeatherEntity
 import com.example.menuhomework.databinding.FragmentWeatherBinding
 import com.squareup.picasso.Picasso
@@ -17,13 +18,7 @@ class WeatherFragment : Fragment() {
     private var binding: FragmentWeatherBinding? = null
     private var isShownDate: Boolean = true
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            item = it.getParcelable(ITEM)
-            isShownDate = it.getBoolean(IS_SHOWN_DATE)
-        }
-    }
+    val args: WeatherFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +31,8 @@ class WeatherFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        item?.let { displayWeather(it) }
+        isShownDate = args.isShowDate
+        displayWeather(args.weather)
     }
 
     override fun onDestroy() {
@@ -72,17 +68,6 @@ class WeatherFragment : Fragment() {
     }
 
     companion object {
-        private const val ITEM = "item"
-        private const val IS_SHOWN_DATE = "date"
         private const val ABSOLUTE_ZERO = -273.15f
-
-        @JvmStatic
-        fun newInstance(weather: WeatherEntity, isShownDate: Boolean) =
-            WeatherFragment().apply {
-                arguments = Bundle().apply {
-                    putParcelable(ITEM, weather)
-                    putBoolean(IS_SHOWN_DATE, isShownDate)
-                }
-            }
     }
 }

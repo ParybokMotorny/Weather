@@ -11,92 +11,38 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.example.menuhomework.R
 import com.example.menuhomework.databinding.ActivityMainBinding
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity :
-    AppCompatActivity(),
-    NavigationView.OnNavigationItemSelectedListener {
-    private var binding: ActivityMainBinding? = null
+    AppCompatActivity() {
+    private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
+    private lateinit var appBarConfiguration: AppBarConfiguration
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding?.root)
+        setContentView(binding.root)
 
-        // додаю drawerMenu для переходу між запиом та історією пошуку
+        navController = findNavController(R.id.fragment)
+        binding.navView.setupWithNavController(navController)
 
-        val toolbar = initToolbar()
-        initDrawer(toolbar)
+        appBarConfiguration = AppBarConfiguration(navController.graph, binding.drawerLayout)
 
-        //Repository.initProvider(App.instance.db.weatherDao)
-
-        // якщо це перше входження в додаток, то показую фрагмент з запитом
-        if (savedInstanceState == null)
-            replaceFragment(CityFragment())
+        setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.fragment)
 
-        binding = null
-    }
-
-    private fun initDrawer(toolbar: Toolbar) {
-        val drawer = binding?.drawerLayout
-        val navigationView = binding?.navView
-        val toggle = ActionBarDrawerToggle(
-            this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
-        )
-        drawer?.addDrawerListener(toggle)
-        toggle.syncState()
-        navigationView?.setNavigationItemSelectedListener(this)
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-
-        when (id) {
-            R.id.nav_home -> {
-                replaceFragment(CityFragment())
-            }
-            R.id.nav_search -> {
-                val imm = this.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(this.currentFocus?.windowToken, 0)
-
-                replaceFragment(HistoryFragment())
-            }
-            R.id.nav_gps -> {
-                replaceFragment(MapsFragment())
-            }
-        }
-        val drawer = findViewById<DrawerLayout>(R.id.drawer_layout)
-        drawer.closeDrawer(GravityCompat.START)
-        return true
-    }
-
-    private fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-            .commit()
-    }
-
-    private fun initToolbar(): Toolbar {
-        val toolbar = binding?.appBarMain?.toolbar
-        setSupportActionBar(toolbar)
-        return toolbar!!
-    }
-
-    override fun onBackPressed() {
-        val drawer = binding?.drawerLayout as DrawerLayout
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }

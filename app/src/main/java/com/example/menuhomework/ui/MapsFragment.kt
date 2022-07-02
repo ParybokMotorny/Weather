@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.view.isVisible
+import androidx.navigation.Navigation
 import com.example.menuhomework.R
 import com.example.menuhomework.databinding.FragmentMapsBinding
 import com.example.menuhomework.model.database.WeatherEntity
@@ -160,13 +161,8 @@ class MapsFragment :
     override fun renderSuccess(data: WeatherEntity) {
         binding.progressBar.isVisible = false
 
-        val fragment = WeatherFragment.newInstance(data, false)
-
-        parentFragmentManager
-            .beginTransaction()
-            .replace(R.id.fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
+        val action = MapsFragmentDirections.actionMapsFragmentToWeatherFragment(data, false)
+        view?.let { Navigation.findNavController(it).navigate(action) }
     }
 
     override fun renderError(error: Throwable) {
