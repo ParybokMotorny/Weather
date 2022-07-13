@@ -23,16 +23,16 @@ class CityFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val refresh = binding.refresh
-        refresh.setOnClickListener(clickListener)
-
-        loadPreferences(requireActivity().getPreferences(MODE_PRIVATE))
+//        val refresh = binding.refresh
+//        refresh.setOnClickListener(clickListener)
+//
+//        loadPreferences(requireActivity().getPreferences(MODE_PRIVATE))
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        savePreferences(requireActivity().getPreferences(MODE_PRIVATE))
+//        savePreferences(requireActivity().getPreferences(MODE_PRIVATE))
     }
 
     private var clickListener: View.OnClickListener = View.OnClickListener {
@@ -75,13 +75,7 @@ class CityFragment :
         binding.progressBar.isVisible = false
 
         if (showError) {
-            AlertDialog.Builder(requireContext())
-                .setTitle(error.message)
-                .setCancelable(false)
-                .setPositiveButton("OK")
-                { _, _ -> }
-                .create()
-                .show()
+            super.renderError(error)
         } else showError = true
     }
 

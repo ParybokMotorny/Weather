@@ -51,13 +51,11 @@ abstract class BaseFragment<E, VB : ViewBinding>
     abstract fun renderSuccess(data: E)
 
     protected open fun renderError(error: Throwable) {
-        error.message?.let { showError(it) }
-    }
-
-    protected fun showError(error: String) {
-        Snackbar.make(binding.root, error, Snackbar.LENGTH_INDEFINITE).apply {
-            setAction(R.string.ok_bth_title) { dismiss() }
-            show()
+        error.message?.let {
+            Snackbar.make(binding.root, it, Snackbar.LENGTH_INDEFINITE).apply {
+                setAction(R.string.ok_bth_title) { dismiss() }
+                show()
+            }
         }
     }
 }

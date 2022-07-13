@@ -1,6 +1,6 @@
 package com.example.menuhomework.viewmodels
 
-import com.example.menuhomework.model.Result
+import com.example.menuhomework.model.AppState
 import com.example.menuhomework.model.Repository
 import com.example.menuhomework.model.database.*
 import com.example.menuhomework.model.exceptions.InvalidSortingException
@@ -16,12 +16,12 @@ class HistoryViewModel(
 
     init {
         launch {
-            weathersChannel.consumeEach { result ->
-                when (result) {
-                    is Result.Success<*> ->
-                        (result as? List<WeatherEntity>)?.let { setData(it) }
-                    else -> setError((result as Result.Error).error)
+            try {
+                weathersChannel.consumeEach { result ->
+                    setData(result)
                 }
+            } catch (e: Throwable) {
+                setError(e)
             }
         }
     }

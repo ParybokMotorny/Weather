@@ -1,6 +1,5 @@
 package com.example.menuhomework.model.database
 
-import com.example.menuhomework.model.Result
 import com.example.menuhomework.model.providers.DataProvider
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.channels.ReceiveChannel
@@ -10,13 +9,9 @@ import kotlin.coroutines.suspendCoroutine
 
 class WeatherSource(private val dao: WeatherDao) : DataProvider {
 
-    override suspend fun subscribeToAllWeathers(): ReceiveChannel<Result> =
-        Channel<Result>(Channel.CONFLATED).apply {
-            try {
-                trySend(Result.Success(dao.getAllWeathers()))
-            } catch (e: Throwable) {
-                trySend(Result.Error(e))
-            }
+    override suspend fun subscribeToAllWeathers(): ReceiveChannel<List<WeatherEntity>> =
+        Channel<List<WeatherEntity>>(Channel.CONFLATED).apply {
+            trySend(dao.getAllWeathers())
         }
 
     override suspend fun getWeathersById(id: Long): WeatherEntity =

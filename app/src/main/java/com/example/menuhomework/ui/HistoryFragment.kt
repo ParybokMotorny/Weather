@@ -7,7 +7,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.menuhomework.R
-import com.example.menuhomework.databinding.FragmentSearchBinding
+import com.example.menuhomework.databinding.FragmentHistoryBinding
 import com.example.menuhomework.model.database.*
 import com.example.menuhomework.viewmodels.HistoryViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -15,7 +15,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class HistoryFragment :
     BaseFragment<
             List<WeatherEntity>,
-            FragmentSearchBinding>(R.layout.fragment_search),
+            FragmentHistoryBinding>(R.layout.fragment_history),
     RequestRecyclerAdapter.OnItemClickListener {
 
     private lateinit var adapter: RequestRecyclerAdapter
@@ -138,7 +138,7 @@ class HistoryFragment :
         Navigation.findNavController(view).navigate(action)
     }
 
-    override fun bindView(): FragmentSearchBinding = FragmentSearchBinding.bind(requireView())
+    override fun bindView(): FragmentHistoryBinding = FragmentHistoryBinding.bind(requireView())
 
     override fun renderSuccess(data: List<WeatherEntity>) {
         adapter.weathers = mutableListOf<WeatherEntity>().apply {
